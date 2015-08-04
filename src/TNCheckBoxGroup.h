@@ -24,7 +24,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic) CGPoint position;
-@property (nonatomic) NSInteger marginBetweenItems;
+@property (nonatomic) CGFloat marginBetweenItems;
 @property (nonatomic) NSInteger rowItemCount;
 
 @property (nonatomic, strong) UIFont *labelFont;
@@ -35,6 +35,5 @@ typedef enum : NSUInteger {
 
 - (instancetype)initWithCheckBoxData:(NSArray *)checkBoxData style:(TNCheckBoxLayout)layout;
 - (void)create;
-
 
 @end

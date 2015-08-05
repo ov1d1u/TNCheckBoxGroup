@@ -111,7 +111,7 @@ NSString *const GROUP_CHANGED = @"groupChanged";
 }
 
 - (void)checkBoxDidChange:(TNCheckBox *)checkbox {
-    [[NSNotificationCenter defaultCenter] postNotificationName:GROUP_CHANGED object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:GROUP_CHANGED object:self userInfo:@{@"checkbox": checkbox}];
     
 }
 

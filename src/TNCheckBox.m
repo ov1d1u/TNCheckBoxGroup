@@ -32,6 +32,8 @@
     [self createLabel];
     [self createHiddenButton];
     
+    [self.data addObserver:self forKeyPath:@"checked" options:NSKeyValueObservingOptionNew context:nil];
+    
     [self checkWithAnimation:NO];
     self.frame = self.btnHidden.frame;
 }
@@ -41,7 +43,7 @@
     self.lblButton.titleLabel.font = self.data.labelFont;
     [self.lblButton setTitleColor:self.data.labelColor forState:UIControlStateNormal];
     [self.lblButton setTitle:self.data.labelText forState:UIControlStateNormal];
-
+    
     if(self.data.labelBorderWidth){
         self.lblButton.layer.masksToBounds = YES;
         self.lblButton.layer.cornerRadius = self.data.labelBorderCornerRadius ?: 5.0;
@@ -53,10 +55,10 @@
 - (void)createCheckbox {};
 
 - (void)createLabel {
-
+    
     CGRect labelRect = [self.data.labelText boundingRectWithSize:CGSizeMake(150, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.data.labelFont} context:nil];
     CGSize labelSize = CGSizeMake(labelRect.size.width, labelRect.size.height);
-
+    
     self.lblButton = [[UIButton alloc] initWithFrame:CGRectMake(self.checkBox.frame.origin.x + self.checkBox.frame.size.width + self.data.labelMarginLeft, (self.checkBox.frame.size.height - labelSize.height) / 2, self.data.labelWidth ?: labelSize.width, self.data.labelHeight ?: labelSize.height)];
     [self updateLabel];
     [self addSubview:self.lblButton];
@@ -83,7 +85,7 @@
     if ([self.delegate respondsToSelector:@selector(checkBoxDidChange:)]) {
         [self.delegate checkBoxDidChange:self];
     }
-
+    
 }
 
 #pragma mark - Animations
@@ -96,6 +98,22 @@
     
     self.frame = CGRectMake( position.x, position.y, self.frame.size.width, self.frame.size.height);
     
+}
+
+#pragma mark - Observers
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([object isKindOfClass:[TNCheckBoxData class]] && [keyPath isEqualToString:@"checked"]) {
+        [self checkWithAnimation:NO];
+    }
+}
+
+- (void) dealloc {
+    @try {
+        [self.data removeObserver:self forKeyPath:@"checked"];
+    }
+    @catch (NSException *exception) {
+        //
+    }
 }
 
 @end
